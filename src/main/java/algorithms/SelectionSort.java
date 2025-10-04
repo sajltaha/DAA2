@@ -34,8 +34,8 @@ public class SelectionSort<T extends Comparable<T>> {
             for (int j = i + 1; j < n; j++) {
                 PerformanceTracker.incrementArrayAccesses(); // Access array[j]
                 PerformanceTracker.incrementArrayAccesses(); // Access array[minIndex]
+                PerformanceTracker.incrementComparisons(); // Every comparison here
                 if (array[j].compareTo(array[minIndex]) < 0) {
-                    PerformanceTracker.incrementComparisons();
                     minIndex = j;
                 }
             }
