@@ -62,3 +62,9 @@ Use CSV data with tools like Excel/Python (matplotlib) to plot time vs n. Exampl
 - Run benchmarks for report plots.
 - Peer review partner's code.
 - Submit analysis-report.pdf.
+
+## JMH Benchmarks
+- Accurate microbenchmarks using JMH.
+- Run: mvn clean package; java -jar target/benchmarks.jar
+- Outputs: Average time (ns/op) for random/sorted/reverse/nearly on n=100,1000,10000.
+- Example: For sorted n=100: ~200 ns/op (optimized).
