@@ -18,3 +18,7 @@
 - BenchmarkRunner: Run benchmarks with configurable n, type (random/sorted/reverse/nearly), repeats.
 - Usage: mvn exec:java -Dexec.args="-n 1000 -t reverse -r 5 -o results.csv"
 - Generates CSV with metrics.
+
+## Optimizations
+- Early termination: Check if unsorted subarray is sorted during min search; break if yes.
+- Improves performance on nearly-sorted data (e.g., sorted: O(n) comparisons instead of O(n^2)).

@@ -5,16 +5,18 @@ import metrics.PerformanceTracker;
 import java.util.Comparator;
 
 /**
- * Baseline implementation of Selection Sort algorithm.
+ * Optimized implementation of Selection Sort with early termination.
  * Sorts an array in ascending order by repeatedly finding the minimum element
  * from the unsorted part and swapping it with the first unsorted element.
+ * Optimization: During min search, check if unsorted subarray [i..n-1] is already sorted
+ * by verifying adjacent elements. If yes, terminate early.
  *
  * @param <T> the type of elements to be sorted, must implement Comparable
  */
 public class SelectionSort<T extends Comparable<T>> {
 
     /**
-     * Sorts the given array in ascending order using Selection Sort.
+     * Sorts the given array in ascending order using optimized Selection Sort.
      * Tracks performance metrics using PerformanceTracker.
      *
      * @param array the array to sort (must not be null or empty)
@@ -29,15 +31,32 @@ public class SelectionSort<T extends Comparable<T>> {
 
         int n = array.length;
         for (int i = 0; i < n - 1; i++) {
-            // Find the index of the minimum element in the unsorted part [i..n-1]
+            // Find min in [i..n-1] and check if subarray is sorted
             int minIndex = i;
+            boolean isSorted = true; // Assume subarray [i..n-1] is sorted
             for (int j = i + 1; j < n; j++) {
-                PerformanceTracker.incrementArrayAccesses(); // Access array[j]
-                PerformanceTracker.incrementArrayAccesses(); // Access array[minIndex]
-                PerformanceTracker.incrementComparisons(); // Every comparison here
+                // Access for min check
+                PerformanceTracker.incrementArrayAccesses(); // array[j]
+                PerformanceTracker.incrementArrayAccesses(); // array[minIndex]
+                PerformanceTracker.incrementComparisons(); // compareTo for min
                 if (array[j].compareTo(array[minIndex]) < 0) {
                     minIndex = j;
                 }
+
+                // Early termination check: adjacent comparison in subarray
+                if (j > i) { // For j == i+1, j-1 == i
+                    PerformanceTracker.incrementArrayAccesses(); // array[j-1]
+                    PerformanceTracker.incrementArrayAccesses(); // array[j] (already counted, but for clarity)
+                    PerformanceTracker.incrementComparisons(); // adjacent compare
+                    if (array[j].compareTo(array[j - 1]) < 0) {
+                        isSorted = false;
+                    }
+                }
+            }
+
+            // Early termination: if subarray [i..n-1] is sorted, done
+            if (isSorted) {
+                break;
             }
 
             // Swap if necessary
@@ -63,7 +82,7 @@ public class SelectionSort<T extends Comparable<T>> {
     }
 
     /**
-     * Returns the number of comparisons performed.
+     * Returns the number of comparisons performed (includes min and adjacent checks).
      * @return comparisons count
      */
     public long getComparisons() {

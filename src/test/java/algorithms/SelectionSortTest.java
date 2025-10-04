@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class SelectionSortTest {
+class SelectionSortTest {
 
     private SelectionSort<Integer> sorter;
     private Random random;
@@ -59,7 +59,7 @@ public class SelectionSortTest {
 
     @ParameterizedTest
     @MethodSource("sortedAndReverseSortedArrays")
-    void shouldSortSortedAndReverseSorted(String name, Integer[] input, long expectedComparisons, long expectedSwaps) {
+    void shouldSortSortedAndReverseSortedWithOptimization(String name, Integer[] input, long expectedComparisons, long expectedSwaps) {
         Integer[] original = Arrays.copyOf(input, input.length);
         sorter.sort(original);
         assertThat(original).isSorted();
@@ -69,9 +69,18 @@ public class SelectionSortTest {
 
     static Stream<Arguments> sortedAndReverseSortedArrays() {
         return Stream.of(
-                Arguments.of("sorted", new Integer[]{1, 2, 3, 4}, 6L, 0L),
-                Arguments.of("reverse", new Integer[]{4, 3, 2, 1}, 6L, 2L) // Правильно для n=4
+                Arguments.of("sorted", new Integer[]{1, 2, 3, 4}, 6L, 0L),   // Optimized: 3 min + 3 adj comp, early break
+                Arguments.of("reverse", new Integer[]{4, 3, 2, 1}, 12L, 2L)  // Full: 6+4+2 comp, 2 swaps, early break at i=2
         );
+    }
+
+    @Test
+    void shouldEarlyTerminateOnNearlySorted() {
+        Integer[] array = {1, 3, 2, 4};  // Needs one swap at i=1, then sorted
+        sorter.sort(array);
+        assertThat(array).containsExactly(1, 2, 3, 4);
+        assertThat(sorter.getComparisons()).isEqualTo(12L);  // 6 (i=0) + 4 (i=1) + 2 (i=2 early check)
+        assertThat(sorter.getSwaps()).isEqualTo(1L);
     }
 
     @Test
