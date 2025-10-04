@@ -1,0 +1,4 @@
+timestamp,time_ns,comparisons,swaps,arrayAccesses,memoryAllocations
+1759602688468,89400,45,0,90,0
+1759602744337,93600,45,0,90,0
+1759602750347,88300,45,0,90,0
