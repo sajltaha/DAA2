@@ -2,8 +2,6 @@ package algorithms;
 
 import metrics.PerformanceTracker;
 
-import java.util.Comparator;
-
 /**
  * Optimized implementation of Selection Sort with early termination.
  * Sorts an array in ascending order by repeatedly finding the minimum element
@@ -18,6 +16,11 @@ public class SelectionSort<T extends Comparable<T>> {
     /**
      * Sorts the given array in ascending order using optimized Selection Sort.
      * Tracks performance metrics using PerformanceTracker.
+     * Edge cases:
+     * - Empty or null array: Throws IllegalArgumentException.
+     * - Single element: No operations performed (0 comparisons/swaps/accesses).
+     * - Duplicates: Handled correctly (stable sort not guaranteed).
+     * - Already sorted: Early termination after first pass.
      *
      * @param array the array to sort (must not be null or empty)
      * @throws IllegalArgumentException if array is null or empty
