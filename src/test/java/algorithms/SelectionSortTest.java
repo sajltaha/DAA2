@@ -55,6 +55,8 @@ class SelectionSortTest {
         Integer[] expected = {1, 2, 3, 3};
         sorter.sort(array);
         assertThat(array).containsExactlyElementsOf(Arrays.asList(expected));
+        assertThat(sorter.getComparisons()).isEqualTo(12L); // Full for unsorted n=4 with opt
+        assertThat(sorter.getSwaps()).isEqualTo(2L); // 2 swaps due to optimization
     }
 
     @ParameterizedTest
